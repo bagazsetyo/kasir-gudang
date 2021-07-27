@@ -34,7 +34,8 @@ class AddTeamMember implements AddsTeamMembers
         $team->users()->attach(
             $newTeamMember, ['role' => $role]
         );
-
+        $newTeamMember->current_team_id = $team->id;
+        $newTeamMember->save();
         TeamMemberAdded::dispatch($team, $newTeamMember);
     }
 

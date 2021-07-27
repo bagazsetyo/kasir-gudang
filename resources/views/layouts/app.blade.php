@@ -16,7 +16,10 @@
         @livewireStyles
 
         <!-- Scripts -->
+        <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+
         <script src="{{ mix('js/app.js') }}" defer></script>
+        @include('layouts.includes.style')
     </head>
     <body class="font-sans antialiased">
         <x-jet-banner />
@@ -42,5 +45,6 @@
         @stack('modals')
 
         @livewireScripts
+        @include('layouts.includes.script')
     </body>
 </html>

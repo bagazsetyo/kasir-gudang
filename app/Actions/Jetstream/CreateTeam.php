@@ -2,6 +2,7 @@
 
 namespace App\Actions\Jetstream;
 
+use App\Models\TypeTeam;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Jetstream\Contracts\CreatesTeams;
@@ -32,6 +33,11 @@ class CreateTeam implements CreatesTeams
             'personal_team' => false,
         ]));
 
+        TypeTeam::create([
+            'users_id' => $user->id,
+            'teams_id' => $team->id,
+            'nama' => $input['type'],
+        ]);
         return $team;
     }
 }

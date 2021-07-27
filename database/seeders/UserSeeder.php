@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $admin = tap(User::create([
+        tap(User::create([
                     'name' => 'Admin',
                     'email' => 'admin@mail.com',
                     'email_verified_at' => now(),
@@ -25,14 +25,6 @@ class UserSeeder extends Seeder
                 ]), function (User $user) {
                     $this->createTeam($user);
                 });
-        $admin->assignRole('admin');
-
-        AddingTeam::dispatch($user);
-
-        $admin->ownedTeams()->create([
-            'name' => 'member',
-            'personal_team' => false,
-        ]);
     }
     
     protected function createTeam(User $user)
