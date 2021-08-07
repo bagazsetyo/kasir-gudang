@@ -15,5 +15,4 @@ class TypeTeam extends Model
         'teams_id',
         'users_id'
     ];
-
 }

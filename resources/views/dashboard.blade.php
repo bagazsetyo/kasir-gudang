@@ -20,13 +20,28 @@
                 </div>
 
                 <div id="panels" class="container mx-auto px-4">
-                    <div class="panel-1 tab-content active py-5">
-                        {{-- @livewire('kasir.kasir-index') --}}
-                        @livewire('gudang.gudang-index')
-                    </div>
-                    <div class="panel-2 tab-content py-5">
-                        Map here
-                    </div>
+                    @if ($type ? $type->nama == 'Kasir' : 0 )
+                        <div class="panel-1 tab-content active py-5">
+                            @livewire('kasir.kasir-index')
+                        </div>
+                        <div class="panel-2 tab-content py-5">
+                            Map here
+                        </div>
+                    @elseif ($type ? $type->nama == 'Gudang' : 0)
+                        <div class="panel-1 tab-content active py-5">
+                            @livewire('gudang.gudang-index')
+                        </div>
+                        <div class="panel-2 tab-content py-5">
+                            Map here
+                        </div>
+                    @else
+                        <div class="panel-1 tab-content active py-5">
+                            heloworld
+                        </div>
+                        <div class="panel-2 tab-content py-5">
+                            Map here
+                        </div>
+                    @endif
                 </div>
 
             </div>

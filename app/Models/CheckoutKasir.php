@@ -5,17 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Gudang extends Model
+class CheckoutKasir extends Model
 {
     use HasFactory;
 
-    protected $table = 'gudang';
+    protected $table = 'checkout_kasir';
 
     protected $fillable = [
-        'users_id',
-        'teams_id',
-        'nama',
+        'kasir_id',
+        'qty',
         'price',
-        'qty'
     ];
 }

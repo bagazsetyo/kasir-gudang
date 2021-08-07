@@ -14,8 +14,15 @@ class Kasir extends Model
     protected $fillable = [
         'users_id',
         'teams_id',
-        'name',
+        'nama',
         'price',
-        'qty'
+        'qty',
+        'uuid'
     ];
+
+    
+    public function scopeTeam()
+    {
+        return $this->where('teams_id', auth()->user()->currentTeam->id);
+    }
 }
