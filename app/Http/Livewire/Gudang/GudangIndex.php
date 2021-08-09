@@ -16,12 +16,16 @@ class GudangIndex extends Component
 
     protected $listeners = [
         'gudangStore' => 'gudangStore',
-        'updateGudang' => 'gudangStore'
+        'updateGudang' => 'updateGudang'
     ];
 
     public function gudangStore()
     {
         
+    }
+    public function updateGudang()
+    {
+        $this->edit = false;
     }
 
     public function render()
@@ -35,8 +39,8 @@ class GudangIndex extends Component
             ->groupBy('nama')
             ->where('teams_id',auth()->user()->currentTeam->id)
             ->where('nama','like', '%' . $this->search . '%')
-            ->where('qty','like', '%' . $this->search . '%')
-            ->where('price','like', '%' . $this->search . '%')
+            ->orWhere('qty','like', '%' . $this->search . '%')
+            ->orWhere('price','like', '%' . $this->search  . '%')
             ->paginate(10);
         }
         return view('livewire.gudang.gudang-index')->with([

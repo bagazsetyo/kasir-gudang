@@ -42,7 +42,7 @@ class GudangEdit extends Component
             $this->ambil = 0;
             $this->team = null;
         }
-        
+
         $teams = [];
         $dataTeam = TypeTeam::select('teams_id')->where('nama','Kasir')->get()->toArray();
         $teams = Team::whereIn('id',$dataTeam)->select('name','id')->get();
@@ -73,8 +73,9 @@ class GudangEdit extends Component
             ]);
         }
         if($this->team){
+            $i = Kasir::latest()->first();
             Kasir::create([
-                'uuid' => uniqid(),
+                'uuid' => str_pad(($i->id ?? 0) + 1,6,"0",STR_PAD_LEFT),
                 'nama' => $this->nama,
                 'qty' => $this->qty,
                 'price' => $this->price,

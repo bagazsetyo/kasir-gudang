@@ -19,8 +19,18 @@ class Kasir extends Model
         'qty',
         'uuid'
     ];
+    
+    protected $hidden = [
+        'users_id',
+        'teams_id'
+    ];
 
     
+    public function teams()
+    {
+        return $this->belongsTo(Team::class, 'teams_id','id');
+    }
+
     public function scopeTeam()
     {
         return $this->where('teams_id', auth()->user()->currentTeam->id);

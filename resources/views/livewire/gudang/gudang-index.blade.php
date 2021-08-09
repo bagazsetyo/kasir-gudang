@@ -86,7 +86,7 @@
                                             </td>
                                              <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
                                                 <p class="text-gray-900 whitespace-no-wrap">
-                                                    Rp. {{number_format($i->price ? $i->price : '0')}}
+                                                    Rp. {{number_format($i->price ? $i->price / $i->total : '0')}}
                                                 </p>
                                             </td>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">

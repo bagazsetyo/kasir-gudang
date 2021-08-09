@@ -16,4 +16,9 @@ class CheckoutKasir extends Model
         'qty',
         'price',
     ];
+    
+    protected $hidden = [
+        'kasir_id',
+    ];
+    
 }

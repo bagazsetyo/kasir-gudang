@@ -15,8 +15,7 @@ class CreateCheckoutTable extends Migration
     {
         Schema::create('checkout', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('teams_id')->constrained()->onDelete('cascade');
-            $table->foreignId('users_id')->constrained()->onDelete('cascade');
+            $table->longText('desc')->nullable();
             $table->json('data');
             $table->timestamps();
         });

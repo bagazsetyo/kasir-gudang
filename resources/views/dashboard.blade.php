@@ -4,7 +4,7 @@
             {{ auth()->user()->currentTeam->name ?? 'Dashboard' }}
         </h2>
     </x-slot>
-
+ 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
@@ -25,14 +25,14 @@
                             @livewire('kasir.kasir-index')
                         </div>
                         <div class="panel-2 tab-content py-5">
-                            Map here
+                            @livewire('kasir.barcode-index')
                         </div>
                     @elseif ($type ? $type->nama == 'Gudang' : 0)
                         <div class="panel-1 tab-content active py-5">
                             @livewire('gudang.gudang-index')
                         </div>
                         <div class="panel-2 tab-content py-5">
-                            Map here
+                            
                         </div>
                     @else
                         <div class="panel-1 tab-content active py-5">
