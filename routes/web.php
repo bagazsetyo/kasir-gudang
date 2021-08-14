@@ -20,7 +20,6 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])
     ->group(function () {
         Route::get('dashboard', 'DashboaradController@index')->name('dashboard');
+        Route::get('report-kasir/{id}', 'DetailReportController@reportKasir')->name('report.kasir');
+        Route::get('report-gudang/{id}', 'DetailReportController@reportGudang')->name('report.gudang');
 });
-// Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-//     return view('dashboard');
-// })->name('dashboard');

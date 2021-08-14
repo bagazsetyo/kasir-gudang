@@ -1,5 +1,9 @@
 <div>
-    
+    @if (session()->has('message'))
+        <x-alert class="bg-red-400 text-white mt-4" role="alert">
+            {{ session('message') }}
+        </x-alert>
+    @endif
     @if($errors->any())
         <div role="alert">
             <div class="border border-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700">
@@ -33,10 +37,10 @@
                     type="number"
                     class="uppercase appearance-none h-10 sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none" />
             </div> 
-            <button wire:click="store" 
+            <x-button wire:click="store" 
                     class="block h-10 uppercase float-right shadow bg-blue-500 hover:bg-blue-600 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 ">
                 Create
-            </button>
+            </x-button>
         </div>   
     </div>    
 </div>

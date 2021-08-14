@@ -21,4 +21,21 @@ class CheckoutKasir extends Model
         'kasir_id',
     ];
     
+    protected static $logAttributes = [
+        'users_id',
+        'teams_id',
+        'nama',
+        'price',
+        'qty'
+    ];
+
+    // protected static $recordEvents = ['deleted'];
+    protected static $logOnlyDirty = false;
+    protected static $logName = 'Detail Kasir';
+
+    public function getDescriptionForEvent(string $eventName)
+    {
+        return "{$eventName}";
+    }
+    
 }

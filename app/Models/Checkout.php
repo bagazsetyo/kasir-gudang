@@ -24,9 +24,29 @@ class Checkout extends Model
     {
         return $this->where('teams_id', auth()->user()->currentTeam->id);
     }
+    
+    public function kasir()
+    {
+        return $this->belongsTo(Team::class, 'teams_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'users_id', 'id');
+    }
 
     public function getDataAttribute($value)
     {
         return json_decode($value);
+    }
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function($model){
+            $model->uuid =  str_pad(mt_rand(1,999999),6,"0",STR_PAD_LEFT);
+            $model->users_id = auth()->user()->id;
+            $model->nama_user = auth()->user()->name;
+            $model->teams_id = auth()->user()->currentTeam->id;
+        });
     }
 }

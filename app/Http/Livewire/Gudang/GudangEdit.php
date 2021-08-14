@@ -2,16 +2,25 @@
 
 namespace App\Http\Livewire\Gudang;
 
+use App\Helpers\Permission;
+use App\Models\Checkout;
 use App\Models\Gudang;
 use App\Models\Kasir;
 use App\Models\Team;
 use App\Models\TypeTeam;
+use JsonException;
 use Livewire\Component;
 
 class GudangEdit extends Component
 {
     public $idGudang, $nama, $qty, $price, $ambil, $team, $keys = 1, $sum = 0;
 
+    public static function desc_permission(){
+        $user = auth()->user();
+        $team = auth()->user()->currentTeam;
+        return $user->teamRole($team)->description;
+    }
+    
     protected $listeners = [
         'editData' => 'edit'
     ];
@@ -58,6 +67,10 @@ class GudangEdit extends Component
 
     public function store()
     {
+        if(!Permission::edit()){
+            session()->flash('message', self::desc_permission());
+            return false;
+        }
         $gudang = Gudang::find($this->idGudang);
         if ($this->team) { 
             $this->validate([
@@ -74,7 +87,7 @@ class GudangEdit extends Component
         }
         if($this->team){
             $i = Kasir::latest()->first();
-            Kasir::create([
+            $kasir = Kasir::create([
                 'uuid' => str_pad(($i->id ?? 0) + 1,6,"0",STR_PAD_LEFT),
                 'nama' => $this->nama,
                 'qty' => $this->qty,
@@ -82,6 +95,13 @@ class GudangEdit extends Component
                 'teams_id' => $this->team,
                 'users_id' => auth()->user()->id
             ]);
+
+            $checkout = Checkout::create([
+                'desc' => "",
+                'data' => json_encode($kasir)
+            ]);
+
+            $this->emit('checkout', $checkout);
         }
         $gudang->update([
             'nama' => $this->nama,

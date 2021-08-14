@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Gudang;
 use App\Models\TypeTeam;
 use Illuminate\Http\Request;
 

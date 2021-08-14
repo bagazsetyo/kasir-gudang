@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Kasir;
 
+use App\Helpers\Permission;
 use App\Models\Checkout;
 use App\Models\CheckoutKasir;
 use App\Models\DetailKasir;
@@ -12,7 +13,7 @@ use Livewire\Component;
 class KasirIndex extends Component
 {
     public $search, $qty = 1, $price;
-    private $total, $bayar;
+    public $total = 0, $bayar = 0;
 
     protected $listeners = [
         'totalBayar' => 'totalBayar',
@@ -22,6 +23,12 @@ class KasirIndex extends Component
     {
         $this->total = $data['total'];
         $this->bayar = $data['bayar'];
+    }
+
+    public static function desc_permission(){
+        $user = auth()->user();
+        $team = auth()->user()->currentTeam;
+        return $user->teamRole($team)->description;
     }
 
     public function render()
@@ -36,8 +43,6 @@ class KasirIndex extends Component
                     ->take(3)
                     ->get();
 
-        $this->emit('updateTotal', $kasir);
-
         return view('livewire.kasir.kasir-index')->with([
             'items' => $items,
             'kasir' => $kasir
@@ -46,9 +51,10 @@ class KasirIndex extends Component
 
     public function create($id, $price)
     {
-        $i = auth()->user()->hasTeamPermission(auth()->user()->currentTeam, 'create');
-        if(!$i){
-            dd(1);
+        $permission = Permission::create();
+        if(!$permission){
+            session()->flash('message', self::desc_permission());
+            return false;
         }
         $data = Kasir::team()->first();
         if ($data->qty) {
@@ -65,21 +71,30 @@ class KasirIndex extends Component
                 'checkout_kasir_id' => $kasir->id,
             ]);
             $this->qtyKasir(-1);
-            
-            $this->emit('updateTotal', $kasir);
         }
     }
     public function increment($id)
     {
+        $permission = Permission::create();
+        if(!$permission){
+            session()->flash('message', self::desc_permission());
+            return false;
+        }
         $data = CheckoutKasir::find($id);
         $kasir = Kasir::team()->first();
         if ($kasir->qty != 0) {
             $data->increment('qty',1);
             $this->qtyKasir(-1);
         }
+        
     }
     public function decrement($id)
     {
+        $permission = Permission::create();
+        if(!$permission){
+            session()->flash('message', self::desc_permission());
+            return false;
+        }
         $kasir = CheckoutKasir::find($id);
         if ($kasir->qty) {
             $kasir->decrement('qty',1);
@@ -88,27 +103,47 @@ class KasirIndex extends Component
     }
     public function hapus($id)
     {
-        CheckoutKasir::find($id)->delete();
+        $permission = Permission::delete();
+        if(!$permission){
+            session()->flash('message', self::desc_permission());
+            return false;
+        }
+        $data = CheckoutKasir::find($id);
+        
+        $kasir = Kasir::find($data->kasir_id);
+        $kasir->increment('qty', $data->qty);
+        
+        $data->delete();
+        $this->emit('updateTotal', $kasir);
+        
     }
     public function bayar()
     {
-        $data = DetailKasir::team()->with('kasir','checkoutKasir')->get();
+        $permission = Permission::create();
+        if(!$permission){
+            session()->flash('message', self::desc_permission());
+            return false;
+        }
+        $details = DetailKasir::team()->with('checkoutKasir','kasir')->get();
+        foreach ($details as $value) {
+            $data[] = ([
+                'qty' => $value->checkoutKasir->qty,
+                'price' => $value->checkoutKasir->price,
+                'name' => $value->kasir->nama
+            ]);
+        }
         $total = [
             'total' => $this->total,
             'bayar' => $this->bayar
         ];
-        $checkout = [
-            'user' => auth()->user(),
+        $checkout[] = [
             'data' => $data,
             'total' => $total
         ];
 
         $items = Checkout::create([
+            'desc' => $details,
             'data' => json_encode($checkout),
-            'users_id' => auth()->user()->id,
-            'nama_user' => auth()->user()->name,
-            'teams_id' => auth()->user()->currentTeam->id, 
-            'uuid' => str_pad(mt_rand(1,999999),6,"0",STR_PAD_LEFT)
         ]);
         DetailKasir::team()->delete();
         
@@ -116,11 +151,17 @@ class KasirIndex extends Component
     }
     public function clear()
     {
-        DetailKasir::team()->delete();
+        $permission = Permission::delete();
+        if(!$permission){
+            session()->flash('message', self::desc_permission());
+            return false;
+        }
+        $kasir = DetailKasir::team()->delete();        
     }
 
     public function qtyKasir($qty)
     {
-        Kasir::team()->first()->increment('qty',$qty);
+        $kasir = Kasir::team()->first()->increment('qty',$qty);
+        $this->emit('updateTotal', $kasir);
     }
 }

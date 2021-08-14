@@ -32,11 +32,17 @@
                             @livewire('gudang.gudang-index')
                         </div>
                         <div class="panel-2 tab-content py-5">
-                            
+                            @livewire('gudang.barcode-index')                            
+                        </div>
+                    @elseif (auth()->user()->currentTeam ? auth()->user()->currentTeam->owner : 0)
+                        <div class="panel-1 tab-content active py-5">
+                            @livewire('helper.activity-log')      
+                        </div>
+                        <div class="panel-2 tab-content py-5">
+                            Hellwo Admin
                         </div>
                     @else
                         <div class="panel-1 tab-content active py-5">
-                            heloworld
                         </div>
                         <div class="panel-2 tab-content py-5">
                             Map here

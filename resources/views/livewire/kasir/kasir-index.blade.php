@@ -1,13 +1,16 @@
 <div>
     <div class="flex justify-end items-rifht">
         <div class="relative"> 
-            <input type="text" wire:model="search" class="h-14 pr-8 pl-5 rounded z-0 focus:shadow focus:outline-none" placeholder="Search anything...">
-            <div class="absolute top-4 right-3"> 
-                <button>Cari</button>
-            </div>
+            <x-input type="text" wire:model="search" class="h-14 pr-8 pl-5 rounded z-0 focus:shadow focus:outline-none" placeholder="Search anything..."></x-input>
         </div>
     </div>
-    
+    <div>
+        @if (session()->has('message'))
+            <x-alert class="bg-red-400 text-white mt-4" role="alert">
+                {{ session('message') }}
+            </x-alert>
+        @endif
+    </div>
     <div class="py-3 text-sm">
         @if ($search)
             @foreach ($items as $i)
@@ -81,9 +84,6 @@
         </table>
     </div>
     
-    {{-- <div class="w-full lg:overflow-visible "> --}}
-        
-    {{-- </div> --}}
     <style>
         .table {
             border-spacing: 0 15px;
@@ -95,16 +95,6 @@
     
         .table tr {
             border-radius: 20px;
-        } */
-    
-        /* tr td:nth-child(n+5),
-        tr th:nth-child(n+5) {
-            border-radius: 0 .625rem .625rem 0;
-        }
-    
-        tr td:nth-child(1),
-        tr th:nth-child(1) {
-            border-radius: .625rem 0 0 .625rem;
         }
     </style>
 </div>

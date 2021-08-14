@@ -1,4 +1,9 @@
 <div>
+    @if (session()->has('message'))
+        <x-alert class="bg-red-400 text-white mt-4" role="alert">
+            {{ session('message') }}
+        </x-alert>
+    @endif
     <body class="antialiased font-sans bg-gray-200">
        @if (session()->has('message'))
             <div role="alert">
@@ -14,12 +19,12 @@
             </div>
         @endif
         <div class="flex sm:flex-row flex-col">
-            <button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded" wire:click="setAction('crate')">
+            <x-button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded" wire:click="setAction('crate')">
                 Create
-            </button>
-            <button class="lg:ml-2 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded" wire:click="setAction('search')">
+            </x-button>
+            <x-button class="lg:ml-2 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded" wire:click="setAction('search')">
                 Search
-            </button>
+            </x-button>
         </div>
         <hr class="mt-3">
             <div class="">
@@ -31,12 +36,9 @@
                     @elseif ($edit)
                         @livewire('gudang.gudang-edit')
                     @else
-                    <div class="my-2 flex sm:flex-row flex-col">
-                        <div class="block relative">
-                            <input
-                                wire:model="search" 
-                                placeholder="Search"
-                                class="appearance-none h-10 sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none" />
+                    <div class="flex justify-end items-rifht">
+                        <div class="relative"> 
+                            <x-input type="text" wire:model="search" class="h-14 pr-8 pl-5 rounded z-0 focus:shadow focus:outline-none" placeholder="Search anything..."></x-input>
                         </div>
                     </div>
                     @endif
@@ -56,10 +58,6 @@
                                         <th
                                             class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider text-center">
                                             Price
-                                        </th>
-                                        <th
-                                            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider text-center">
-                                            Total
                                         </th>
                                         <th
                                             class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider text-right">
@@ -86,14 +84,9 @@
                                             </td>
                                              <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
                                                 <p class="text-gray-900 whitespace-no-wrap">
-                                                    Rp. {{number_format($i->price ? $i->price / $i->total : '0')}}
+                                                    Rp. {{number_format($i->price ?? '0')}}
                                                 </p>
                                             </td>
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
-                                               <p class="text-gray-900 whitespace-no-wrap">
-                                                   {{number_format($i->total ? $i->total : '0')}}
-                                               </p>
-                                           </td>
                                             <td class="text-right px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 
                                                 <span
@@ -108,7 +101,7 @@
                                                     class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
                                                     <span aria-hidden
                                                         class="absolute inset-0 bg-red-300 opacity-50 rounded-full"></span>
-                                                            <button wire:click="destroy('{{ $i->nama }}')">
+                                                            <button wire:click="destroy('{{ $i->id }}')">
                                                                 <span class="relative">Hapus</span>
                                                             </button>
                                                 </span>

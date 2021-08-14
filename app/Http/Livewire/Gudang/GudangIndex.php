@@ -23,6 +23,11 @@ class GudangIndex extends Component
     {
         
     }
+    public static function desc_permission(){
+        $user = auth()->user();
+        $team = auth()->user()->currentTeam;
+        return $user->teamRole($team)->description;
+    }
     public function updateGudang()
     {
         $this->edit = false;
@@ -30,14 +35,10 @@ class GudangIndex extends Component
 
     public function render()
     {
-        $items = Gudang::select('nama', \DB::raw('count(nama) as total, sum(qty) as qty, sum(price) as price'))
-                        ->groupBy('nama')
-                        ->where('teams_id',auth()->user()->currentTeam->id)
+        $items = Gudang::where('teams_id',auth()->user()->currentTeam->id)
                         ->paginate(10);
         if($this->search){
-            $items = Gudang::select('nama', \DB::raw('count(nama) as total, sum(qty) as qty, sum(price) as price'))
-            ->groupBy('nama')
-            ->where('teams_id',auth()->user()->currentTeam->id)
+            $items = Gudang::where('teams_id',auth()->user()->currentTeam->id)
             ->where('nama','like', '%' . $this->search . '%')
             ->orWhere('qty','like', '%' . $this->search . '%')
             ->orWhere('price','like', '%' . $this->search  . '%')
@@ -59,7 +60,8 @@ class GudangIndex extends Component
     }
     public function destroy($id)
     {
-        Gudang::where('nama',$id)->delete();
+        $i = Gudang::where('id',$id);
+        $i->delete();
     }
     public function edit($id)
     {

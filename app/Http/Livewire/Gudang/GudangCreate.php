@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Gudang;
 
+use App\Helpers\Permission;
 use App\Models\Gudang;
 use Livewire\Component;
 
@@ -9,6 +10,12 @@ class GudangCreate extends Component
 {
     public $nama, $qty, $price;
 
+    public static function desc_permission(){
+        $user = auth()->user();
+        $team = auth()->user()->currentTeam;
+        return $user->teamRole($team)->description;
+    }
+    
     public function render()
     {
         return view('livewire.gudang.gudang-create');
@@ -16,6 +23,10 @@ class GudangCreate extends Component
 
     public function store()
     {
+        if(!Permission::create()){
+            session()->flash('message', self::desc_permission());
+            return false;
+        }
         $this->validate([
             'nama' => 'required',
             'qty' => 'required|integer',

@@ -22,9 +22,24 @@ class Kasir extends Model
     
     protected $hidden = [
         'users_id',
-        'teams_id'
     ];
 
+    protected static $logAttributes = [
+        'users_id',
+        'teams_id',
+        'nama',
+        'price',
+        'qty'
+    ];
+
+    // protected static $recordEvents = ['deleted'];
+    protected static $logOnlyDirty = false;
+    protected static $logName = 'Gudang';
+
+    public function getDescriptionForEvent(string $eventName)
+    {
+        return "{$eventName}";
+    }
     
     public function teams()
     {

@@ -1,5 +1,9 @@
 <div>
-    
+    @if (session()->has('message'))
+        <x-alert class="bg-red-400 text-white mt-4" role="alert">
+            {{ session('message') }}
+        </x-alert>
+    @endif
     @if($errors->any())
         <div role="alert">
             <div class="border border-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700">
@@ -60,10 +64,10 @@
                 </select>
             </div>
             @endif    
-            <button wire:click="store" 
+            <x-button wire:click="store" 
                     class="block h-10 uppercase float-right shadow bg-blue-500 hover:bg-blue-600 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 ">
-                Create
-            </button>
+                Update
+            </x-button>
         </div>
     </div>    
     @else
